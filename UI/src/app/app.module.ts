@@ -4,6 +4,7 @@ import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
 import { BarChartModule, PieChartModule } from '@swimlane/ngx-charts';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -13,7 +14,8 @@ import { BarChartModule, PieChartModule } from '@swimlane/ngx-charts';
     BrowserAnimationsModule,
     BrowserModule,
     BarChartModule,
-    PieChartModule    
+    PieChartModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]

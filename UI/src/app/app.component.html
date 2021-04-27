@@ -3,7 +3,9 @@
     [view]="view"
     [legend]="false"
     [labels]="true"
-    [results]="data">
+    [trimLabels]="false"
+    [results]="dataPie"
+    (select)="onSelectPie($event)">
   </ngx-charts-pie-chart>
 
   <ngx-charts-bar-vertical
@@ -13,8 +15,8 @@
     [yAxis]="true"
     [showXAxisLabel]="true"
     [showYAxisLabel]="true"
-    xAxisLabel="Countries"
+    xAxisLabel="Time"
     yAxisLabel="Amount"
-    [results]="data">
+    [results]="dataBar">
   </ngx-charts-bar-vertical>
 </div>

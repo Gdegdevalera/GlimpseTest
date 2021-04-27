@@ -32,10 +32,12 @@ namespace SN.Controllers
 
             if (name != null)
             {
-                result = result.Where(x => x.Name == name);
+                return result.Where(x => x.Name == name);
             }
 
-            return result;
+            return result
+                .GroupBy(x => x.Hour, x => x.Total)
+                .Select(x => new CategoryByHour { Hour = x.Key, Total = x.Sum() });
         }
     }
 }
