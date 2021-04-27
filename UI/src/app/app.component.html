@@ -1,0 +1,20 @@
+<div style="display: flex; padding-top: 10rem;">
+  <ngx-charts-pie-chart
+    [view]="view"
+    [legend]="false"
+    [labels]="true"
+    [results]="data">
+  </ngx-charts-pie-chart>
+
+  <ngx-charts-bar-vertical
+    [view]="view"
+    [legend]="false"
+    [xAxis]="true"
+    [yAxis]="true"
+    [showXAxisLabel]="true"
+    [showYAxisLabel]="true"
+    xAxisLabel="Countries"
+    yAxisLabel="Amount"
+    [results]="data">
+  </ngx-charts-bar-vertical>
+</div>
