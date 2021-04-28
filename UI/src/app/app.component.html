@@ -1,14 +1,14 @@
-<div style="display: flex; padding-top: 10rem;">
+<div style="display: flex; padding-top: 10rem;" (click)="removeFilter()">
   <ngx-charts-pie-chart
     [view]="view"
     [legend]="false"
     [labels]="true"
     [trimLabels]="false"
-    [results]="dataPie"
+    [results]="dataPie$ | async"
     (select)="onSelectPie($event)">
   </ngx-charts-pie-chart>
 
-  <ngx-charts-bar-vertical
+  <ngx-charts-bar-vertical-stacked
     [view]="view"
     [legend]="false"
     [xAxis]="true"
@@ -17,6 +17,6 @@
     [showYAxisLabel]="true"
     xAxisLabel="Time"
     yAxisLabel="Amount"
-    [results]="dataBar">
-  </ngx-charts-bar-vertical>
+    [results]="dataBar$ | async">
+  </ngx-charts-bar-vertical-stacked>
 </div>

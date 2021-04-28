@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SN.Data;
+using SN.Models;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace SN.Controllers
@@ -18,26 +18,15 @@ namespace SN.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<Category> Get()
-        {
-            return _db.Categories;
-        }
-
-        [HttpGet("by-hours/{name?}")]
-        public IEnumerable<CategoryByHour> GetPerHour(string name)
+        public CategoriesViewModel Get()
         {
             var now = DateTimeOffset.UtcNow.AddDays(-1);
 
-            var result = _db.CategoriesByHour.Where(x => x.Hour >= now);
-
-            if (name != null)
+            return new CategoriesViewModel
             {
-                return result.Where(x => x.Name == name);
-            }
-
-            return result
-                .GroupBy(x => x.Hour, x => x.Total)
-                .Select(x => new CategoryByHour { Hour = x.Key, Total = x.Sum() });
+                Categories = _db.Categories,
+                CategoriesByHour = _db.CategoriesByHour.Where(x => x.Hour >= now)
+            };
         }
     }
 }

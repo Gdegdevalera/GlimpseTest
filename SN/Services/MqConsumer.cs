@@ -62,7 +62,11 @@ namespace SN.Services
                     var entityByHour = db.CategoriesByHour.FirstOrDefault(x => x.Hour == hour);
                     if (entityByHour == null)
                     {
-                        db.CategoriesByHour.Add(new CategoryByHour { Name = category, Total = 1, Hour = hour });
+                        db.CategoriesByHour.Add(new CategoryByHour { 
+                            Name = category, 
+                            Total = 1, 
+                            Hour = hour }
+                        );
                     }
                     else
                     {
@@ -122,7 +126,7 @@ namespace SN.Services
         {
             return new DateTimeOffset(
                 source.Year, source.Month, source.Day, 
-                source.Hour, source.Minute, 0, // TODO set minutes to 0
+                source.Hour, 0, 0,
                 source.Offset);
         }
     }

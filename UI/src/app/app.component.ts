@@ -1,40 +1,46 @@
 import { DatePipe } from '@angular/common';
-import { Component } from '@angular/core';
-import { ApiService } from './services/api.service';
+import { Component, OnInit } from '@angular/core';
+import { select, Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import { filterAction, loadAction } from './app.actions';
+import { IState } from './app.reducer';
+import { barSelector, pieSelector } from './app.selectors';
+
+export interface ChartItem {
+  name: string;
+  value: number;
+}
+
+export interface BarItem {
+  name: string | null;
+  series: ChartItem[];
+}
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
 
-  private datePipe = new DatePipe('en-US');
+  view: [number, number] = [700, 400];
+  dataPie$: Observable<ChartItem[]>;
+  dataBar$: Observable<BarItem[]>;
 
-  constructor(api: ApiService) {
-    api.getCategories()
-        .subscribe(x => {
-          this.dataPie = x.map(c => { return { name: c.name, value: c.total }});
-        });
-    api.getCategoriesByHours()
-        .subscribe(x => {
-          this.dataBar = x.map(c => { return { name: this.datePipe.transform(c.hour, 'HH:mm'), value: c.total }});
-        });
+  constructor(private store: Store<IState>) {
+    this.dataPie$ = store.pipe(select(pieSelector));
+    this.dataBar$ = store.pipe(select(barSelector));
   }
 
-  title = 'UI';
-  view: [number, number] = [700, 400];
-  dataPie: {
-      name: string;
-      value: number;
-    }[] = [];
-    
-  dataBar: {
-    name: string | null;
-    value: number;
-  }[] = [];
+  ngOnInit(): void {
+    this.store.dispatch(loadAction());
+  }
 
-  onSelectPie(data: any): void {
-    console.log('Item clicked', JSON.parse(JSON.stringify(data)));
+  onSelectPie(data: ChartItem): void {
+    this.store.dispatch(filterAction(data));
+  }
+
+  removeFilter(): void {
+    this.store.dispatch(filterAction({ name: ''}));
   }
 }
