@@ -48,21 +48,13 @@ namespace SN.Services
 
                 foreach (var category in imageRecognizedMessage.Categories)
                 {
-                    var entity = db.Categories.FirstOrDefault(x => x.Name == category);
-                    if (entity == null)
-                    {
-                        db.Categories.Add(new Category { Name = category, Total = 1 });
-                    }
-                    else
-                    {
-                        entity.Total++;
-                    }
-
                     var hour = imageRecognizedMessage.UploadedOn.RoundToHours();
-                    var entityByHour = db.CategoriesByHour.FirstOrDefault(x => x.Hour == hour);
+                    var entityByHour = db.Categories
+                        .FirstOrDefault(x => x.Name == category && x.Hour == hour);
+
                     if (entityByHour == null)
                     {
-                        db.CategoriesByHour.Add(new CategoryByHour { 
+                        db.Categories.Add(new Category { 
                             Name = category, 
                             Total = 1, 
                             Hour = hour }

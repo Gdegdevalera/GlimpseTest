@@ -13,8 +13,6 @@ namespace SN.Data
 
         public DbSet<Category> Categories { get; set; }
 
-        public DbSet<CategoryByHour> CategoriesByHour { get; set; }
-
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);

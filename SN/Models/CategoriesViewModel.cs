@@ -6,6 +6,5 @@ namespace SN.Models
     public class CategoriesViewModel
     {
         public IEnumerable<Category> Categories { get; set; }
-        public IEnumerable<CategoryByHour> CategoriesByHour { get; set; }
     }
 }

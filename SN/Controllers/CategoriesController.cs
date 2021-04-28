@@ -24,8 +24,7 @@ namespace SN.Controllers
 
             return new CategoriesViewModel
             {
-                Categories = _db.Categories,
-                CategoriesByHour = _db.CategoriesByHour.Where(x => x.Hour >= now)
+                Categories = _db.Categories.Where(x => x.Hour >= now)
             };
         }
     }

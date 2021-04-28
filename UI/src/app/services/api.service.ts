@@ -5,17 +5,10 @@ import { environment } from '../../environments/environment';
 
 export interface CategoriesModel
 {
-  categories: Category[],
-  categoriesByHour: CategoryByHour[]
+  categories: Category[]
 }
 
 export interface Category {
-  id: number;
-  name: string;
-  total: number;
-} 
-
-export interface CategoryByHour {
   id: number;
   name: string;
   total: number;

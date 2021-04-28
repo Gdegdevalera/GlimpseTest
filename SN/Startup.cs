@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -48,16 +47,6 @@ namespace SN
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            //using (var scope = app.ApplicationServices.CreateScope())
-            //{
-            //    var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-            //    var existed = !db.Database.EnsureCreated();
-            //    if (existed)
-            //    {
-            //        db.Database.Migrate();
-            //    }
-            //}
-
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

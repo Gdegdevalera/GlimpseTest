@@ -1,44 +1,84 @@
+import { DatePipe } from "@angular/common";
 import { createSelector } from "@ngrx/store";
-import { BarItem } from "./app.component";
-import { dateToBarItemName } from "./app.helpers";
+import { BarItem, ChartItem } from "./app.component";
 import { IAppState, IState } from "./app.reducer";
 
 export const pieSelector = createSelector(
     (state: IState) => state.app,
-    (state: IAppState) => state.categories
+    (state: IAppState) => {
+        
+        if (state.categories.length == 0)
+            return null;
+
+        return state.categories.reduce((result, c) => {
+            const item = result.find(x => x.name == c.name);
+            if (item) {
+                item.value += c.total;
+            } else {
+                result.push({ name: c.name, value: c.total });
+            }
+            return result;
+        }, [] as ChartItem[]);
+    }
 );
   
 export const barSelector = createSelector(
     (state: IState) => state.app,
     (state: IAppState) => {
-        const barItems = getCategoriesByHourFiltered(state);
+
+        if (state.categories.length == 0)
+            return null;
+
+        const barItems = getCategoriesFiltered(state)
+            .reduce((result, curr) => {
+                const hour = dateToBarItemName(curr.hour);
+                const groupItem = result.find(x => x.name === hour);
+                const chartItem = { name: curr.name, value: curr.total };
+
+                if(!groupItem) {
+                    result.push({ name: hour, series: [ chartItem ]});
+                } else {
+                    groupItem.series.push(chartItem);
+                    groupItem.series.sort((a, b) => compare(a.name, b.name));
+                }
+                
+                return result;
+                }, [] as BarItem[]);
+
         const now = new Date();
-        const categoriesByHour: BarItem[] = [];
+        const categories: BarItem[] = [];
         now.setHours(now.getHours() - 23);
+
         for(let i = 23; i >= 0; i--) {
           const hour = dateToBarItemName(now);
           const barItem = barItems.find(x => x.name === hour);
           if(!barItem) {
-            categoriesByHour.push({name: hour, series: []});
+            categories.push({name: hour, series: []});
           } else {
-            categoriesByHour.push(barItem);
+            categories.push(barItem);
           }
   
           now.setHours(now.getHours() + 1);
         }
-        return categoriesByHour;
+
+        return categories;
     }
 );
 
-function getCategoriesByHourFiltered(state: IAppState) {
-    if(!state.selected)
-        return state.categoriesByHour;
-    
-    return state.categoriesByHour.reduce((result, group) => {
-        const category = group.series.find(x => x.name === state.selected);
-        if(!!category) {
-            result.push({ name: group.name, series: [category ]});
-        }
-        return result;
-    }, [] as BarItem[]);
+function getCategoriesFiltered(state: IAppState) {
+    return state.selected 
+        ? state.categories.filter(x => x.name == state.selected)
+        : state.categories;
+}
+
+function compare(a: string, b: string) {
+    if (a < b) { return -1; }
+    if (a > b) { return 1; }
+    return 0;
+}
+
+const datePipe = new DatePipe('en-US');
+
+export function dateToBarItemName(value: string | Date) {
+  return datePipe.transform(value, 'h a');
 }

@@ -29,8 +29,8 @@ interface ItemColor {
 export class AppComponent implements OnInit {
 
   view: [number, number] = [700, 400];
-  dataPie$: Observable<ChartItem[]>;
-  dataBar$: Observable<BarItem[]>;
+  dataPie$: Observable<ChartItem[] | null>;
+  dataBar$: Observable<BarItem[] | null>;
   itemColors: ItemColor[] = [];
 
   constructor(private store: Store<IState>) {
@@ -38,7 +38,7 @@ export class AppComponent implements OnInit {
     this.dataBar$ = store.pipe(select(barSelector));
     
     this.dataPie$.subscribe(c => {
-      this.itemColors = c.map((x, i) => { 
+      this.itemColors = (c || []).map((x, i) => { 
         return { name: x.name, value: colors[i % colors.length] };
       })
     });
