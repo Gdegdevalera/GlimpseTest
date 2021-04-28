@@ -45,7 +45,13 @@ const _appReducer = createReducer(
       return { ...state, categories, categoriesByHour };
   }),
   
-  on(filterAction, (state, props) => { return { ...state, selected: props.name }}),
+  on(filterAction, (state, props) => { 
+    if (state.selected === props.name) {
+      return { ...state, selected: '' };
+    } else {
+      return { ...state, selected: props.name };
+    }
+  }),
 );
  
 function compare(a: string, b: string) {

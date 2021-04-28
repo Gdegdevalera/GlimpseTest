@@ -1,10 +1,11 @@
-<div style="display: flex; padding-top: 10rem;" (click)="removeFilter()">
+<div style="display: flex; padding-top: 10rem;">
   <ngx-charts-pie-chart
     [view]="view"
     [legend]="false"
     [labels]="true"
     [trimLabels]="false"
     [results]="dataPie$ | async"
+    [customColors]="customColors()"
     (select)="onSelectPie($event)">
   </ngx-charts-pie-chart>
 
@@ -17,6 +18,7 @@
     [showYAxisLabel]="true"
     xAxisLabel="Time"
     yAxisLabel="Amount"
+    [customColors]="customColors()"
     [results]="dataBar$ | async">
   </ngx-charts-bar-vertical-stacked>
 </div>
