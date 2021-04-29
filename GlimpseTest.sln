@@ -7,7 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PSN", "PSN\PSN.csproj", "{8
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ML", "ML\ML.csproj", "{48E43CEE-9836-4702-9E3B-2347C340882E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SN", "SN\SN.csproj", "{B52A6AB4-1E41-4FAC-BD9E-A314A25C848E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SN", "SN\SN.csproj", "{B52A6AB4-1E41-4FAC-BD9E-A314A25C848E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntegrationTests", "IntegrationTests\IntegrationTests.csproj", "{4CF3455C-7D9B-4D47-AEAD-9367CFA0ABA6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{B52A6AB4-1E41-4FAC-BD9E-A314A25C848E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B52A6AB4-1E41-4FAC-BD9E-A314A25C848E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B52A6AB4-1E41-4FAC-BD9E-A314A25C848E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4CF3455C-7D9B-4D47-AEAD-9367CFA0ABA6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4CF3455C-7D9B-4D47-AEAD-9367CFA0ABA6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4CF3455C-7D9B-4D47-AEAD-9367CFA0ABA6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4CF3455C-7D9B-4D47-AEAD-9367CFA0ABA6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

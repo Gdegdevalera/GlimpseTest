@@ -1,13 +1,11 @@
 ﻿using System;
 
-namespace SN.Services
+namespace ML.Messages
 {
-    public class ImageRecognizedMessage
+    public class ImageUploadedMessage : IMessage
     {
         public Guid ImageId { get; set; }
 
         public DateTimeOffset UploadedOn { get; set; }
-
-        public string[] Categories { get; set; }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace PSN
+namespace PSN.Messages
 {
     public class ImageUploadedMessage
     {

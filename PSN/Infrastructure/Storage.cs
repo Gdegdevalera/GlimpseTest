@@ -1,21 +1,30 @@
-﻿using System;
+﻿using Microsoft.Extensions.Configuration;
+using System;
 using System.IO;
 using System.Threading.Tasks;
 
-namespace PSN
+namespace PSN.Infrastructure
 {
-    public class Storage
+    public interface IStorage
+    {
+        Task<(Guid, DateTimeOffset)> Save(Stream requestStream);
+    }
+
+    public class Storage : IStorage
     {
         private readonly string _storagePath;
 
-        public Storage(string storagePath)
+        public Storage(IConfiguration configuration)
         {
-            _storagePath = storagePath;
+            _storagePath = configuration["Storage:Path"];
         }
 
         public async Task<(Guid, DateTimeOffset)> Save(Stream requestStream)
         {
             var now = DateTimeOffset.UtcNow;
+
+            TestHelper.Delay();
+
             var fileId = Guid.NewGuid();
             var fileName = now.ToString("yyyy_MM_dd__HH_mm_ss_ffff___") + fileId;
             var filePath = Path.Combine(_storagePath, fileName);

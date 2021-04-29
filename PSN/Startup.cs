@@ -5,15 +5,15 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
+using PSN.Infrastructure;
+using PSN.Services;
+using System;
 using System.IO;
 
 namespace PSN
 {
     public class Startup
     {
-        private Storage _storage;
-        private Queue _queue;
-
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -23,8 +23,9 @@ namespace PSN
 
         public void ConfigureServices(IServiceCollection services)
         {
-            _storage = new Storage(Configuration["Storage:Path"]);
-            _queue = new Queue();
+            services.AddSingleton<IMqClient, MqClient>();
+            services.AddSingleton<IStorage, Storage>();
+            services.AddSingleton<RequestHandler>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -40,15 +41,14 @@ namespace PSN
             {
                 endpoints.MapPost("/", async context =>
                 {
-                    using var requestStream = context.Request.Body;
-                    var (imageId, uploadedOn) = await _storage.Save(requestStream);
-                    _queue.Publish(new ImageUploadedMessage
-                    {
-                        ImageId = imageId,
-                        UploadedOn = uploadedOn
-                    });
+                    var handler = context.RequestServices.GetRequiredService<RequestHandler>();
 
-                    var response = JsonConvert.SerializeObject(new { id = imageId });
+                    using var requestStream = context.Request.Body;
+                    var message = await handler.Handle(requestStream);
+
+                    Console.WriteLine($"Image id:{message.ImageId} was saved on {message.UploadedOn}");
+
+                    var response = JsonConvert.SerializeObject(message);
                     await context.Response.WriteAsync(response);
                 });
             });

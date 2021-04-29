@@ -5,7 +5,12 @@ using System.Linq;
 
 namespace SN.Data
 {
-    public class ApplicationDbContext : DbContext
+    public interface IApplicationDbContext
+    {
+        public DbSet<Category> Categories { get; set; }
+    }
+
+    public class ApplicationDbContext : DbContext, IApplicationDbContext
     {
         public ApplicationDbContext(DbContextOptions options) : base(options)
         {

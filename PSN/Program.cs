@@ -7,6 +7,7 @@ namespace PSN
     {
         public static void Main(string[] args)
         {
+            TestHelper.SetThreadPoolSize();
             CreateHostBuilder(args).Build().Run();
         }
 

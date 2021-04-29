@@ -5,20 +5,23 @@ services:
     image: rabbitmq:3-management
     container_name: rabbitmq
     environment:
-      RABBITMQ_DEFAULT_USER: test
-      RABBITMQ_DEFAULT_PASS: test
+        RABBITMQ_LOGS: Error
+        RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER}
+        RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASS}
+    # volumes:
+        # - ./.docker/rabbitmq:/var/lib/rabbitmq
     ports:
-    - 4369:4369
-    - 5671:5671
-    - 5672:5672
-    - 25672:25672
-    - 15671:15671
-    - 15672:15672
+        - 4369:4369
+        - 5671:5671
+        - 5672:5672
+        - 25672:25672
+        - 15671:15671
+        - 15672:15672
     
   lb:
     build: ./LB
     ports:
-      - 80:80
+        - 82:80
 
   psn:
     # scale: 3
@@ -27,22 +30,45 @@ services:
     volumes:
         - ./.docker/storage:/app/shared
     environment:
-        "storage:path": shared
+        "Storage:Path": shared
+        "RabbitMq:Hostname": rabbitmq
+        "RabbitMq:User": ${RABBITMQ_USER}
+        "RabbitMq:Password": ${RABBITMQ_PASS}
+        "RabbitMq:QueueToPublish": ImageUploaded
+        "Test:Delay:Min": 1000
+        "Test:Delay:Max": 1200
+        "Test:ThreadPool:Size": 8
 
   ml:
     # scale: 2
     build: ./ml
     restart: always
+    volumes:
+        - ./.docker/storage:/app/shared
+    environment:
+        "Storage:Path": shared
+        "RabbitMq:Hostname": rabbitmq
+        "RabbitMq:User": ${RABBITMQ_USER}
+        "RabbitMq:Password": ${RABBITMQ_PASS}
+        "RabbitMq:QueueToConsume": ImageUploaded
+        "RabbitMq:QueueToPublish": ImageRecognized
+        "Test:Delay:Min": 1000
+        "Test:Delay:Max": 1200
 
   sn:
     build: ./sn
     restart: always
     volumes:
         - ./.docker/sn:/app/database
+    environment:
+        "RabbitMq:QueueToConsume": ImageRecognized
+        "RabbitMq:Hostname": rabbitmq
+        "RabbitMq:User": ${RABBITMQ_USER}
+        "RabbitMq:Password": ${RABBITMQ_PASS}
     ports:
         - 81:80
 
-  # ui:
-    # build: ./UI
-    # ports:
-    # - 4200:80
+  ui:
+    build: ./UI
+    ports:
+        - 80:80

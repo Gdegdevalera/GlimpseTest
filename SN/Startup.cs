@@ -4,8 +4,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.OpenApi.Models;
+using RabbitMQ.Client;
 using SN.Data;
+using SN.Infrastructure;
 using SN.Services;
 
 namespace SN
@@ -37,12 +38,9 @@ namespace SN
                 });
             });
 
+            services.AddScoped<ApplicationService>();
             services.AddHostedService<MqConsumer>();
             services.AddControllers();
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "SN", Version = "v1" });
-            });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -50,17 +48,15 @@ namespace SN
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "SN v1"));
             }
 
             app.UseCors("CorsPolicy");
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
 
             app.UseRouting();
 
-            app.UseAuthorization();
+            //app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {

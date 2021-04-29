@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace ML
+namespace ML.Messages
 {
-    public class ImageRecognizedMessage
+    public class ImageRecognizedMessage : IMessage
     {
         public Guid ImageId { get; set; }
 
