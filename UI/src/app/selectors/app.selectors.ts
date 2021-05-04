@@ -1,7 +1,7 @@
 import { DatePipe } from "@angular/common";
 import { createSelector } from "@ngrx/store";
-import { BarItem, ChartItem } from "./app.component";
-import { IAppState, IState } from "./app.reducer";
+import { BarItem, ChartItem } from "../components/app.component";
+import { IAppState, IState } from "../reducers/app.reducer";
 
 export const pieSelector = createSelector(
     (state: IState) => state.app,

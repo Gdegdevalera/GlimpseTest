@@ -1,6 +1,6 @@
-import { ActionReducerMap, createReducer, on } from '@ngrx/store';
-import { filterAction, loadSuccessAction } from './app.actions';
-import { Category } from './services/api.service';
+import { Action, createReducer, on } from '@ngrx/store';
+import { filter, loadSuccess } from '../actions/app.actions';
+import { Category } from '../models/category.model';
 
 export interface IState {
   app: IAppState;
@@ -11,7 +11,7 @@ export interface IAppState {
     categories: Category[];
 }
 
-export const initialState: IAppState = {
+const initialState: IAppState = {
     selected: '',
     categories: []
 };
@@ -19,11 +19,11 @@ export const initialState: IAppState = {
 const _appReducer = createReducer(
   initialState,
   
-  on(loadSuccessAction, (state, props) => { 
+  on(loadSuccess, (state, props) => { 
       return { ...state, categories: props.categories };
   }),
   
-  on(filterAction, (state, props) => { 
+  on(filter, (state, props) => { 
     if (state.selected === props.name) {
       return { ...state, selected: '' };
     } else {
@@ -32,6 +32,6 @@ const _appReducer = createReducer(
   }),
 );
 
-export function getAppReducer(): ActionReducerMap<IState, any> {
-  return { app: _appReducer };
+export function appReducer(state: IAppState = initialState, action: Action): IAppState {
+  return _appReducer(state, action);  
 }

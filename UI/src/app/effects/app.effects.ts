@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { of } from 'rxjs';
 import { map, mergeMap, catchError } from 'rxjs/operators';
-import { ApiService } from './services/api.service';
+import { ApiService } from '../services/api.service';
  
 @Injectable()
 export class AppEffects {
