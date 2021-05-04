@@ -3,7 +3,6 @@ using System;
 
 namespace SN.Data
 {
-    [Index(new[] { "Name", "Hour" }, IsUnique = true)]
     public class Category
     {
         public long Id { get; set; }

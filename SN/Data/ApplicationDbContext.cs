@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using System;
 using System.Linq;
@@ -8,6 +9,10 @@ namespace SN.Data
     public interface IApplicationDbContext
     {
         public DbSet<Category> Categories { get; set; }
+
+        public DatabaseFacade Database { get; }
+
+        public int SaveChanges();
     }
 
     public class ApplicationDbContext : DbContext, IApplicationDbContext
@@ -21,6 +26,10 @@ namespace SN.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+
+            builder.Entity<Category>()
+                .HasIndex(c => new { c.Name, c.Hour })
+                .IsUnique();
 
             //https://blog.dangl.me/archive/handling-datetimeoffset-in-sqlite-with-entity-framework-core/
             if (Database.ProviderName == "Microsoft.EntityFrameworkCore.Sqlite")

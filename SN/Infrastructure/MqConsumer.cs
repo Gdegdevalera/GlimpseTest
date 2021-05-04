@@ -1,7 +1,7 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
@@ -18,16 +18,16 @@ namespace SN.Infrastructure
     {
         private readonly IServiceProvider _serviceProvider;
         private readonly ILogger<MqConsumer> _logger;
-        private readonly IConfiguration _configuration;
+        private readonly MqConsumerConfig _config;
 
         public MqConsumer(
             IServiceProvider serviceProvider,
             ILogger<MqConsumer> logger,
-            IConfiguration configuration)
+            IOptions<MqConsumerConfig> config)
         {
             _serviceProvider = serviceProvider;
             _logger = logger;
-            _configuration = configuration;
+            _config = config.Value;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -53,9 +53,9 @@ namespace SN.Infrastructure
         {
             var mqFactory = new ConnectionFactory
             {
-                HostName = _configuration["RabbitMq:Hostname"],
-                UserName = _configuration["RabbitMq:User"],
-                Password = _configuration["RabbitMq:Password"],
+                HostName = _config.Hostname,
+                UserName = _config.User,
+                Password = _config.Password,
             };
 
             using var connection = mqFactory.PatientlyCreateConnection();
@@ -75,7 +75,7 @@ namespace SN.Infrastructure
                 channel.BasicAck(e.DeliveryTag, multiple: false);
             };
 
-            var queue = _configuration["RabbitMq:QueueToConsume"];
+            var queue = _config.QueueToConsume;
             channel.QueueDeclare(queue,
               durable: true,
               exclusive: false,

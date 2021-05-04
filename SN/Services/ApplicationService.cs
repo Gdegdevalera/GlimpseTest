@@ -1,5 +1,6 @@
 ﻿using SN.Data;
 using SN.Messages;
+using SN.Models;
 using System;
 using System.Linq;
 
@@ -7,11 +8,21 @@ namespace SN.Services
 {
     public class ApplicationService
     {
-        private readonly ApplicationDbContext _db;
+        private readonly IApplicationDbContext _db;
 
-        public ApplicationService(ApplicationDbContext db)
+        public ApplicationService(IApplicationDbContext db)
         {
             _db = db;
+        }
+
+        public CategoriesViewModel GetCategories()
+        {
+            var now = DateTimeOffset.UtcNow.AddDays(-1);
+
+            return new CategoriesViewModel
+            {
+                Categories = _db.Categories.Where(x => x.Hour >= now)
+            };
         }
 
         public void UpdateCounters(ImageRecognizedMessage message)

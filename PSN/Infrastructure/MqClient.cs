@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using PSN.Messages;
 using RabbitMQ.Client;
@@ -19,16 +19,16 @@ namespace PSN.Infrastructure
         private readonly IConnection _connection;
         private readonly IModel _channel;
 
-        public MqClient(IConfiguration configuration)
+        public MqClient(IOptions<RabbitMqConfig> options)
         {
             var connectionFactory = new ConnectionFactory
             {
-                HostName = configuration["RabbitMq:Hostname"],
-                UserName = configuration["RabbitMq:User"],
-                Password = configuration["RabbitMq:Password"],
+                HostName = options.Value.Hostname,
+                UserName = options.Value.User,
+                Password = options.Value.Password,
             };
 
-            _queueName = configuration["RabbitMq:QueueToPublish"];
+            _queueName = options.Value.QueueToPublish;
 
             _connection = connectionFactory.PatientlyCreateConnection();
             _channel = _connection.CreateModel();

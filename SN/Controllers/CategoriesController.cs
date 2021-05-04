@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using SN.Data;
 using SN.Models;
-using System;
-using System.Linq;
+using SN.Services;
 
 namespace SN.Controllers
 {
@@ -10,22 +8,14 @@ namespace SN.Controllers
     [Route("[controller]")]
     public class CategoriesController : ControllerBase
     {
-        private readonly ApplicationDbContext _db;
+        private readonly ApplicationService _service;
 
-        public CategoriesController(ApplicationDbContext db)
+        public CategoriesController(ApplicationService service)
         {
-            _db = db;
+            _service = service;
         }
 
         [HttpGet]
-        public CategoriesViewModel Get()
-        {
-            var now = DateTimeOffset.UtcNow.AddDays(-1);
-
-            return new CategoriesViewModel
-            {
-                Categories = _db.Categories.Where(x => x.Hour >= now)
-            };
-        }
+        public CategoriesViewModel Get() => _service.GetCategories();
     }
 }

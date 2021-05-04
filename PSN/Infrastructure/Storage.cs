@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Options;
 using System;
 using System.IO;
 using System.Threading.Tasks;
@@ -14,9 +14,9 @@ namespace PSN.Infrastructure
     {
         private readonly string _storagePath;
 
-        public Storage(IConfiguration configuration)
+        public Storage(IOptions<StorageConfig> config)
         {
-            _storagePath = configuration["Storage:Path"];
+            _storagePath = config.Value.Path;
         }
 
         public async Task<(Guid, DateTimeOffset)> Save(Stream requestStream)

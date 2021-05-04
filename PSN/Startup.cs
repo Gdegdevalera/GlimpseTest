@@ -23,6 +23,14 @@ namespace PSN
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddOptions<StorageConfig>()
+                .Bind(Configuration.GetSection("Storage"))
+                .ValidateDataAnnotations();
+
+            services.AddOptions<RabbitMqConfig>()
+                .Bind(Configuration.GetSection("RabbitMq"))
+                .ValidateDataAnnotations();
+
             services.AddSingleton<IMqClient, MqClient>();
             services.AddSingleton<IStorage, Storage>();
             services.AddSingleton<RequestHandler>();
