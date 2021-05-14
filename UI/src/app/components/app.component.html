@@ -1,16 +1,16 @@
 <div style="display: flex; padding-top: 10rem;">
   <ngx-charts-pie-chart *ngIf="dataPie$ | async as dataPie; else noDataBlock"
-    [view]="view"
+    [view]="[700,400]"
     [legend]="false"
     [labels]="true"
     [trimLabels]="false"
     [results]="dataPie"
-    [customColors]="customColors()"
+    [customColors]="itemColors$ | async"
     (select)="onSelectPie($event)">
   </ngx-charts-pie-chart>
 
   <ngx-charts-bar-vertical-stacked *ngIf="dataBar$ | async as dataBar"
-    [view]="view"
+    [view]="[700,400]"
     [legend]="false"
     [xAxis]="true"
     [yAxis]="true"
@@ -18,7 +18,7 @@
     [showYAxisLabel]="true"
     xAxisLabel="Time"
     yAxisLabel="Amount"
-    [customColors]="customColors()"
+    [customColors]="itemColors$ | async"
     [results]="dataBar">
   </ngx-charts-bar-vertical-stacked>
 </div>

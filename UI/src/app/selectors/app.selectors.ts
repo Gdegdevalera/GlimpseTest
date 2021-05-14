@@ -1,10 +1,13 @@
 import { DatePipe } from "@angular/common";
 import { createSelector } from "@ngrx/store";
+import { colors } from "../common/app.colors";
 import { BarItem, ChartItem } from "../components/app.component";
 import { IAppState, IState } from "../reducers/app.reducer";
 
+const appStateSelector = (state: IState) => state.app;
+
 export const pieSelector = createSelector(
-    (state: IState) => state.app,
+    appStateSelector,
     (state: IAppState) => {
         
         if (state.categories.length == 0)
@@ -23,7 +26,7 @@ export const pieSelector = createSelector(
 );
   
 export const barSelector = createSelector(
-    (state: IState) => state.app,
+    appStateSelector,
     (state: IAppState) => {
 
         if (state.categories.length == 0)
@@ -62,6 +65,15 @@ export const barSelector = createSelector(
         }
 
         return categories;
+    }
+);
+
+export const colorsSelector = createSelector(
+    appStateSelector,    
+    (state: IAppState) => {
+        return state.categories.map((x, i) => {
+            return { name: x.name, value: colors[i % colors.length] };
+        });
     }
 );
 
