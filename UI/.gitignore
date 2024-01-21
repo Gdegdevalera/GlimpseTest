@@ -16,6 +16,7 @@ speed-measure-plugin*.json
 
 # IDEs and editors
 /.idea
+/.vscode
 .project
 .classpath
 .c9/
@@ -33,6 +34,7 @@ speed-measure-plugin*.json
 
 # misc
 /.sass-cache
+/.angular
 /connect.lock
 /coverage
 /libpeerconnection.log
@@ -44,3 +46,4 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
+
